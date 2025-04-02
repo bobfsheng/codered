@@ -1,0 +1,132 @@
+
+[x] 0. create init app
+
+$ npx @react-native-community/cli@latest init andr2
+$ cd andr2
+$ ## change to gradlew 8.13 (installed) in gradlew-wrapper.properties
+$ clear; rm -fr package-lock.json node_modules; npm cache clean --force; npm install
+$ clear; cd android; gradlew clean; cd ..; npx @react-native run-android
+
+[x] 1. add red package to andr 
+    ## problematic packages:
+    "react-native-google-mobile-ads": "14.6.0",
+    "react-native-safe-area-context": "^5.3.0",
+    "react-native-pager-view": "^6.7.0",
+    "react-native-splash-screen": "^3.3.0",
+    "react-native-video": "^5.2.1",
+    "react-native-screens": "^4.9.2",
+    "react-native-splash-screen": "^3.3.0", 
+    ## may cause conflict of androidx and android.support pacakge
+
+[x] 1.1. add below to config: 
+    resolver: {
+        sourceExts: ['tsx', 'ts', 'js', 'jsx', 'json'], 
+    },    
+
+[x] 1.2. in android/build.gradle, change kotlin version to 1.8.0, com.android.tools.build:gradle to 8.1.0
+[x] 1.3. in android/app/build.gradle, add below in dependencies {}
+    configurations.all {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+[x] 1.4. in android/gradle.properties, add     
+    android.useAndroidX=true
+    android.enableJetifier=true
+
+[x] 1.5. Java heap space problem. change vm option in gradle.properties:
+    org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=2048m
+
+   the app built, bundled, loaded, and run successfully
+ 
+[x] 2. add red js source to andr
+    src
+    App.tsx
+    app.json
+    index.json
+    jsconfig.json
+    tsconfig.json
+    metro.config.js
+
+    https://stackoverflow.com/questions/76285679/react-native-metro-unable-to-resolve-module
+
+    app error:  missing application module under "src" 
+
+[x] 2.1. change metro.config.js with dynamic resolver, to resolve /*:
+      
+      
+            "@assets": path.resolve(__dirname, 'src/assets'),
+            "@constants": path.resolve(__dirname, 'src/constants'),
+      },
+      resolveRequest: (context, moduleName, platform) => {
+        if (moduleName.startsWith('@constants/')|| moduleName.startsWith('@assets/')) {
+          const basePath = moduleName.startsWith('@constants/')? 'src/constants' : 'src/assets';
+          const relativePath = moduleName.split('/').slice(1).join('/');
+          const filePath = path.resolve(__dirname, basePath, relativePath);
+          const ext = path.extname(filePath) ? '' : '.js';
+          return {
+            filePath: filePath + ext,
+            type: 'sourceFile',
+          }
+        }
+        return context.resolveRequest(context, moduleName, platform);
+      }
+
+[x] 2.2. add back package "@invertase/react-native-apple-authentication": "^2.2.2"
+        in sign-on page, looking for react-native-google-mobile-ads
+
+[x] 2.3. add back package "react-native-google-mobile-ads": "^15.0.0",
+        build error in cmake:
+        remove, then app error: in ResetPasswordScreen.js looking for react-native-video
+
+[x] 2.4. add package "react-native-video": "^6.11.0",
+        app error: react-native-google-mobile-ads in AdComponent.js
+        redo 2.3 --> no build error in cmake,  but app error missing "react-native-iap": "^12.16.2", in Purchases.js
+
+[x] 2.5. add package "react-native-iap": "^12.16.2"
+        build error: However we cannot choose between the following variants of project :react-native-iap: - amazonDebugApiElements - playDebugApiElements All of them match the consumer attributes: - Variant 'amazonDebugApiElements' capability 'andr2:react-native-iap:unspe
+        solution: 
+[x] 2.6. in android/app/build.gradle, defaultConfig {}, add:   missingDimensionStrategy 'store', 'play'
+        app error: missing react-native-store-review
+
+[x] 2.7. add package:  "react-native-store-review": "^0.4.3",
+        app error: [runtime not ready]: Invariant Violation: AsyncStorage has been removed from react-native-core. It can now be installed and imported from '@react-native-async-storage/async-storage'......
+
+
+[x] 3. add red android source to andr
+app-install error: Incorrect package="com.redko.redvest" found in source AndroidManifest.xml: /Users/codeysheng/Desktop/proj/bt/andr2/android/app/src/main/AndroidManifest.xml  
+solution: rename it in android/settings.gradle and android/app/build.gradle
+build error: lots of java packages missing
+
+
+[x] 3.1. rebuild gradle wrapper
+    $ cd android; rm -fr ~/.gradle/caches/ .gradle/ build/
+    $ gradle wrapper --gradle-version 8.13 --distribution-type all --no-daemon --info --stacktrace > wrapper.log 2>&1
+    $ gradlew --version
+    ## add to app/build.gradle:  implementation 'androidx.appcompat:appcompat:1.6.1' // Provides Theme.AppCompat.DayNight.NoActionBar
+    $ gradlew clean assembleDebug --info  > assembleDebug.log 2>&1
+        
+        keep getting aar_metadata.properties lost in transforms after transform step - the downlaoded aar is good.
+    
+[x] 3.2. up grade to AGP to 8.5.0, transform step worked. 
+    error: compliling Java
+
+    3.3. add RN packages.
+        . build.gradle
+        . app/build.gradle
+        . settings.gradle 
+
+    3.4. add kotlin dependency        
+        . build.gradle
+        . app/build.gradle
+
+   error: Could not determine the dependencies of task ':app:compileDebugJavaWithJavac'.
+> Could not resolve all dependencies for configuration ':app:debugCompileClasspath'.
+   > Could not find any matches for com.facebook.react:react-native:+ as no versions of com.facebook.react:react-native are available.
+     Required by:
+         project :app
+
+    3.5. remove from app/build.gradle:    implementation 'com.facebook.react:react-native:+'        
+        upgrade to 8.7.0, new transformed...meta (react-native-andoid) not found gone
+
+    3.6. add to app/build.gradle: apply plugin: "com.facebook.react"
+        error, auto link json file not generated
+

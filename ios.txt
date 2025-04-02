@@ -1,0 +1,52 @@
+-- 
+
+rm -rf ~/Library/Developer/Xcode/DerivedData
+rm -rf ~/Library/Developer/Xcode/Archives
+rm -rf ~/Library/Caches/com.apple.dt.Xcode
+
+
+
+-- codey
+pod install
+yarn clean-all
+nvm list
+nvm use [ver]
+
+-- doc
+https://reactnative.dev/docs/environment-setup
+https://reactnative.dev/docs/getting-started-without-a-framework?package-manager=npm
+
+  Run instructions for iOS:
+    • cd "/Users/codeysheng/Desktop/proj/bt/AwesomeProject/ios"
+    
+    • Install Cocoapods
+      • bundle install # you need to run this only once in your project.
+      • bundle exec pod install
+      • cd ..
+    
+    • npx react-native run-ios
+    - or -
+    • Open AwesomeProject/ios/AwesomeProject.xcodeproj in Xcode or run "xed -b ios"
+    • Hit the Run button
+
+
+-- environment
+ 
+1. homebrew: 
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /opt/homebrew/bin/brew 
+    4.4.21
+2. ruby: 
+    brew install ruby
+    ~/.rbenv/shims/ruby 
+    3.2.2
+3. cocoapods: 
+    gem instal cocoapods
+    ~/.rbenv/shims/pod
+    1.16.2
+
+
+## directory usage
+
+red3 - android test
+
