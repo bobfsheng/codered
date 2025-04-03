@@ -1,0 +1,25 @@
+const cryptoPairs = [
+  { original: 'BTCUSD', formatted: 'BTC/USD' },
+  { original: 'USDTUSD', formatted: 'USDT/USD' },
+  { original: 'PAXGUSD', formatted: 'PAXG/USD' },
+  { original: 'DOGEUSD', formatted: 'DOGE/USD' },
+  { original: 'ETHUSD', formatted: 'ETH/USD' },
+  { original: 'MATICUSD', formatted: 'MATIC/USD' },
+  { original: 'SHIBUSD', formatted: 'SHIB/USD' },
+  { original: 'LTCUSD', formatted: 'LTC/USD' },
+  { original: 'SHIBUSD', formatted: 'SHIB/USD' },
+  { original: 'SUSHIUSD', formatted: 'SUSHI/USD' },
+  { original: 'SOLUSD', formatted: 'SOL/USD' },
+  { original: 'TRXUSD', formatted: 'TRX/USD' },
+  { original: 'UNIUSD', formatted: 'UNI/USD' },
+  { original: 'WBTCUSD', formatted: 'WBTC/USD' },
+  { original: 'YFIUSD', formatted: 'YFI/USD' },
+  { original: 'DAIUSD', formatted: 'DAI/USD' },
+  { original: 'LINKUSD', formatted: 'LINK/USD' },
+  { original: 'AAVEUSD', formatted: 'AAVE/USD' },
+  { original: 'AVAXUSD', formatted: 'AVAX/USD' },
+  { original: 'BATUSD', formatted: 'BAT/USD' },
+  { original: 'GRTUSD', formatted: 'GRT/USD' },
+]
+
+export { cryptoPairs }
