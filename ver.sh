@@ -3,7 +3,7 @@ appname=$2
 
 if [[ -z $dir ]] ;  then 
   echo "Usage: ver.sh dir [appname]" 
-  echo "   appname: nodepkg | nodesrc | android | gradles"
+  echo "   appname: nodepkg | jsconfig | jssource | android | gradles"
   exit 1 
 fi
 
@@ -19,7 +19,15 @@ function app_ver {
 		fi
 	  done 
 
-	elif [[ $appname == "nodesrc" ]]; then
+	elif [[ $appname == "jsconfig" ]]; then
+	  for source in orig red ; do
+		if diff ${dir}/tsconfig.json chgfile/${source}_tsconfig.json > /dev/null 2>&1 ; then
+			echo "$dir $appname ---> $source"
+			break;
+		fi
+	  done
+
+	elif [[ $appname == "jsource" ]]; then
 	  for source in orig red ; do
 		if diff ${dir}/app.json chgfile/${source}_app.json > /dev/null 2>&1 ; then
 			echo "$dir $appname ---> $source"
@@ -49,7 +57,8 @@ function app_ver {
 
 if [[ -z $appname ]]; then 
 	app_ver $dir nodepkg 
-	app_ver $dir nodesrc 
+	app_ver $dir jsconfig 
+	app_ver $dir jssource 
 	app_ver $dir android 
 	app_ver $dir gradles
 else
