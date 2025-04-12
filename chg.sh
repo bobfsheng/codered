@@ -19,6 +19,7 @@ if [[ $appname == "nodepkg" ]]; then
   cd ..
 
 elif [[ $appname == "jsconfig" ]]; then
+  cp chgfile/${source}_app.json ${dir}/app.json 
   cp chgfile/${source}_tsconfig.json ${dir}/tsconfig.json 
   cp chgfile/${source}_metro.config.js ${dir}/metro.config.js 
   if [[ $source == "red" ]]; then
@@ -27,7 +28,6 @@ elif [[ $appname == "jsconfig" ]]; then
  
 elif [[ $appname == "jssource" ]]; then
   cp chgfile/${source}_App.tsx ${dir}/App.tsx 
-  cp chgfile/${source}_app.json ${dir}/app.json 
   if [[ $source == "red" ]]; then
   	rm -fr ${dir}/src
 	cp -fr chgfile/red_np_src ${dir}/src 

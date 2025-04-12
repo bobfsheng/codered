@@ -27,13 +27,12 @@ function app_ver {
 		fi
 	  done
 
-	elif [[ $appname == "jsource" ]]; then
-	  for source in orig red ; do
-		if diff ${dir}/app.json chgfile/${source}_app.json > /dev/null 2>&1 ; then
-			echo "$dir $appname ---> $source"
-			break;
+	elif [[ $appname == "jssource" ]]; then
+		if [[ -d ${dir}/src/components ]]; then
+			echo "$dir $appname ---> red"
+		else
+			echo "$dir $appname ---> orig"
 		fi
-	  done
 
 	elif [[ $appname == "android" ]]; then 
 		if [[ -d ${dir}/android/app/src/main/jni ]]; then 
