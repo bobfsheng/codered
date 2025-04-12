@@ -2,19 +2,21 @@
 [x] 0. create init app
 
 $ npx @react-native-community/cli@latest init andr2
-$ np.sh 
-$ sim.sh 
+$ cd andr2
+$ ## change to gradlew 8.13 (installed) in gradlew-wrapper.properties
+$ clear; rm -fr package-lock.json node_modules; npm cache clean --force; npm install
+$ clear; cd android; gradlew clean; cd ..; npx react-native run-android
 
-[x] 1. change node pacakge:  
-
-$ chg.sh andr2 nodepkg red
-$ sim.sh
-...... could not determine the dependencies of task ':app:compileDebugJavaWithJavac'......
-
-1.1.  in android/app/build.gradle, defaultConfig {}, add:   missingDimensionStrategy 'store', 'play'
-...... Execution failed for task ':app:checkDebugAarMetadata'.
-> A failure occurred while executing com.android.build.gradle.internal.tasks.CheckAarMetadataWorkAction > 2 issues were found when checking AAR metadata: 1. Dependency 'androidx.browser:browser:1.9.0-alpha02' requires libraries and applications that depend on it to compile against version 36 or later of the Android APIs. :app is currently compiled against android-35. Also, the maximum recommended compile SDK version for Android Gradle plugin 8.8.0 is 35. Recommended action: Update this project's version of the Android Gradle plugin to one that supports 36, then update this project to use compileSdk of at least 36. Note that updating a library or application's compileSdk (which allows newer APIs to be used) can be done separately from updating targetSdk (which opts the app in to new runtime behavior) and minSdk (which determines which devices the app can be installed on). 2. Dependency 'androidx.browser:browser:1.9.0-alpha02' requires Android Gradle plugin 8.9.1 or higher.
-
+[x] 1. add red package to andr 
+    ## problematic packages:
+    "react-native-google-mobile-ads": "14.6.0",
+    "react-native-safe-area-context": "^5.3.0",
+    "react-native-pager-view": "^6.7.0",
+    "react-native-splash-screen": "^3.3.0",
+    "react-native-video": "^5.2.1",
+    "react-native-screens": "^4.9.2",
+    "react-native-splash-screen": "^3.3.0", 
+    ## may cause conflict of androidx and android.support pacakge
 
 [x] 1.1. add below to config: 
     resolver: {

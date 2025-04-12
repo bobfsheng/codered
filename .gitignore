@@ -3,3 +3,4 @@ andr2/
 andr2-?/
 *.log
 .DS_Store
+*swp*
