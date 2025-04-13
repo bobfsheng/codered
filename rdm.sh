@@ -32,8 +32,8 @@ if [[ ! -d andr2-$reqBkupId ]]; then
 else
   if [[ -d andr2 ]]; then  
   	echo moving current andr2 to andr2-$avaBkupId
-  	echo mv andr2 andr2-$avaBkupId
+  	mv andr2 andr2-$avaBkupId
   fi
   echo moving backup andr2-$reqBkupId as andr2
-  echo mv andr2-$reqBkupId andr2
+  mv andr2-$reqBkupId andr2
 fi
