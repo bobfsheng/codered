@@ -1,5 +1,4 @@
 ## get version, print detail diff if closest but not 100% match 
-
 # set -x
 
 positional_args=()
@@ -109,6 +108,61 @@ function gradles_diff {
 	else
 	  echo --- app/build.gradle.......matched
 	fi
+  fi ## verbose or no
+}
+
+function jssource_diff {
+  local source=$1
+  local verbose=$2
+  local diffcnt=0;
+  if [[ $verbose != true ]]; then
+    diff chgfile/${source}_App.tsx ${dir}/App.tsx > /dev/null 2>&1
+    diffcnt=$((diffcnt + $?))
+    diff chgfile/${source}_index.js ${dir}/index.js > /dev/null 2>&1
+    diffcnt=$((diffcnt + $?))
+    if [[ ${source} == "red" ]]; then
+      fileCnt=$(diff -r chgfile/${source}_np_src ${dir}/src | sort | wc -l)
+      diffcnt=$((diffcnt + fileCnt))
+    fi
+    echo ${diffcnt}
+  else
+    if ! diff chgfile/${source}_App.tsx ${dir}/App.tsx > /dev/null 2>&1; then
+      echo --- App.tsx......
+      diff chgfile/${source}_App.tsx ${dir}/App.tsx > /dev/null 2>&1
+    else
+      echo --- App.tsx......matched
+    fi
+    if ! diff chgfile/${source}_index.js ${dir}/index.js > /dev/null 2>&1; then
+      echo --- index.js......
+      diff chgfile/${source}_index.js ${dir}/index.js > /dev/null 2>&1
+    else
+      echo --- index.js......matched
+    fi
+    if [[ -d chgfile/${source}_np_src ]]; then
+	if ! diff -rq chgfile/${source}_np_src ${dir}/src > /dev/null 2>&1; then
+	  echo -- np src directory .......
+	  diff -r chgfile/${source}_np_src ${dir}/src | sort | head -15
+	else
+	  echo -- np src directory ......matched
+	fi
+    fi
+  fi ## verbose or no
+}
+
+function android_diff {
+  local source=$1
+  local verbose=$2
+  local diffcnt=0;
+  if [[ $verbose != true ]]; then
+    diffFileCnt=$(diff -r chgfile/${source}_android_src ${dir}/android/app/src | sort | wc -l)
+    echo ${diffcnt}
+  else
+    if ! diff -rq chgfile/${source}_android_src ${dir}/android/app/src > /dev/null 2>&1; then
+      echo "--- diff detail......"
+      diff -r chgfile/${source}_android_src ${dir}/android/app/src | sort | head -15
+    else
+      echo "--- all files matched."
+    fi
   fi
 }
 
@@ -180,20 +234,51 @@ function app_ver {
 		fi	
 	  fi
 
-
 	elif [[ $appname == "jssource" ]]; then
-		if [[ -d ${dir}/src/components ]]; then
-			echo "$dir $appname ---> red"
+	  local origDiffCnt=$(jssource_diff orig false)   
+	  local redDiffCnt=$(jssource_diff red false)   
+	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
+		if [[ $origDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> orig"
 		else
-			echo "$dir $appname ---> orig"
+		  echo "$dir $appname ~~~> orig"
+		  if [[ $verbose == true ]]; then
+			jssource_diff orig true
+		  fi 
 		fi
+	  else  					## red 
+		if [[ $redDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> red"
+		else
+		  echo "$dir $appname ~~~> red"
+		  if [[ $verbose == true ]]; then
+			jssource_diff red true
+		  fi 
+		fi	
+	  fi
 
 	elif [[ $appname == "android" ]]; then 
-		if [[ -d ${dir}/android/app/src/main/jni ]]; then 
-			echo "$dir $appname ---> red"
+	  local origDiffCnt=$(android_diff orig false)   
+	  local redDiffCnt=$(android_diff red false)   
+	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
+		if [[ $origDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> orig"
 		else
-			echo "$dir $appname ---> orig"
-		fi  
+		  echo "$dir $appname ~~~> orig"
+		  if [[ $verbose == true ]]; then
+			android_diff orig true
+		  fi 
+		fi
+	  else  					## red 
+		if [[ $redDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> red"
+		else
+		  echo "$dir $appname ~~~> red"
+		  if [[ $verbose == true ]]; then
+			android_diff red true
+		  fi 
+		fi	
+	  fi
 
 	else
 	  echo "$appname has no source code."
