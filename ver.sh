@@ -171,28 +171,30 @@ function app_ver {
 	local appname=$2
 	local found=false
   
-	if [[ $appname == "nodepkg" ]]; then
-	  found=false
-	  for source in orig red ; do
+	case $appname in 
+	  nodepkg )
+	    found=false
+	    for source in orig red ; do
 		if diff ${dir}/package.json chgfile/${source}_package.json > /dev/null 2>&1 ; then 
 			echo "$dir $appname ---> $source"
 			found=true
 			break;
 		fi
-	  done 
-	  if [[ ! $found ]] && [[ $verbose == true ]]; then
+	    done 
+	    if [[ ! $found ]] && [[ $verbose == true ]]; then
 		for source in orig red ; do
 		  echo "$dir $appname ---> diff from $source: "
 		  diff ${dir}/package.json chgfile/${source}_package.json | head -10 
 		done
-	  fi  
-	
-	else
-	  cmd=("${appname}_diff" "orig" "false")
-	  local origDiffCnt=$("${cmd[@]}")   
-	  cmd[1]="red"
-	  local redDiffCnt=$("${cmd[@]}") 
-	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
+	    fi  
+	    ;;
+
+	  jsconfig | gradles | jssource | android )	
+	    cmd=("${appname}_diff" "orig" "false")
+	    local origDiffCnt=$("${cmd[@]}")   
+	    cmd[1]="red"
+	    local redDiffCnt=$("${cmd[@]}") 
+	    if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
 		if [[ $origDiffCnt -eq 0 ]]; then
 		  echo "$dir $appname ---> orig"
 		else
@@ -203,7 +205,7 @@ function app_ver {
 			"${cmd[@]}"	
 		  fi 
 		fi
-	  else  					## red 
+	    else  					## red 
 		if [[ $redDiffCnt -eq 0 ]]; then
 		  echo "$dir $appname ---> red"
 		else
@@ -214,9 +216,11 @@ function app_ver {
 			"${cmd[@]}"	
 		  fi 
 		fi ###	diffCnt eq 0
-	  fi ### ccompare orig and red diffCnt
-
-	fi ### appname
+	    fi ### ccompare orig and red diffCnt
+	    ;;
+	  *) echo "$appname is invalid. Valid apps: nodepkg, jsconfig, gradles, jssource, android" 
+	    ;; 
+	esac
 }
 
 if [[ -z $appname ]]; then 
