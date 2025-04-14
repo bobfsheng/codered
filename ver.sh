@@ -186,103 +186,37 @@ function app_ver {
 		  diff ${dir}/package.json chgfile/${source}_package.json | head -10 
 		done
 	  fi  
-
-	elif [[ $appname == "jsconfig" ]]; then
-	  local origDiffCnt=$(jsconfig_diff orig false)   
-	  local redDiffCnt=$(jsconfig_diff red false)   
-	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
-		if [[ $origDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> orig"
-		else
-		  echo "$dir $appname ~~~> orig"
-		  if [[ $verbose == true ]]; then
-			jsconfig_diff orig true
-		  fi 
-		fi
-	  else  					## red 
-		if [[ $redDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> red"
-		else
-		  echo "$dir $appname ~~~> red"
-		  if [[ $verbose == true ]]; then
-			jsconfig_diff red true
-		  fi 
-		fi	
-	  fi
-
-	elif [[ $appname == "gradles" ]]; then 
-	  local origDiffCnt=$(gradles_diff orig false)   
-	  local redDiffCnt=$(gradles_diff red false)   
-
-	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
-		if [[ $origDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> orig"
-		else
-		  echo "$dir $appname ~~~> orig"
-		  if [[ $verbose == true ]]; then
-			gradles_diff orig true
-		  fi 
-		fi
-	  else  					## red 
-		if [[ $redDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> red"
-		else
-		  echo "$dir $appname ~~~> red"
-		  if [[ $verbose == true ]]; then
-			gradles_diff red true
-		  fi 
-		fi	
-	  fi
-
-	elif [[ $appname == "jssource" ]]; then
-	  local origDiffCnt=$(jssource_diff orig false)   
-	  local redDiffCnt=$(jssource_diff red false)   
-	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
-		if [[ $origDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> orig"
-		else
-		  echo "$dir $appname ~~~> orig"
-		  if [[ $verbose == true ]]; then
-			jssource_diff orig true
-		  fi 
-		fi
-	  else  					## red 
-		if [[ $redDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> red"
-		else
-		  echo "$dir $appname ~~~> red"
-		  if [[ $verbose == true ]]; then
-			jssource_diff red true
-		  fi 
-		fi	
-	  fi
-
-	elif [[ $appname == "android" ]]; then 
-	  local origDiffCnt=$(android_diff orig false)   
-	  local redDiffCnt=$(android_diff red false)   
-	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
-		if [[ $origDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> orig"
-		else
-		  echo "$dir $appname ~~~> orig"
-		  if [[ $verbose == true ]]; then
-			android_diff orig true
-		  fi 
-		fi
-	  else  					## red 
-		if [[ $redDiffCnt -eq 0 ]]; then
-		  echo "$dir $appname ---> red"
-		else
-		  echo "$dir $appname ~~~> red"
-		  if [[ $verbose == true ]]; then
-			android_diff red true
-		  fi 
-		fi	
-	  fi
-
+	
 	else
-	  echo "$appname has no source code."
-	fi
+	  cmd=("${appname}_diff" "orig" "false")
+	  local origDiffCnt=$("${cmd[@]}")   
+	  cmd[1]="red"
+	  local redDiffCnt=$("${cmd[@]}") 
+	  if [[ $origDiffCnt -le $redDiffCnt ]]; then 	## orig
+		if [[ $origDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> orig"
+		else
+		  echo "$dir $appname ~~~> orig"
+		  if [[ $verbose == true ]]; then
+			cmd[1]="orig"
+			cmd[2]="true"
+			"${cmd[@]}"	
+		  fi 
+		fi
+	  else  					## red 
+		if [[ $redDiffCnt -eq 0 ]]; then
+		  echo "$dir $appname ---> red"
+		else
+		  echo "$dir $appname ~~~> red"
+		  if [[ $verbose == true ]]; then
+			cmd[1]="red"
+			cmd[2]="true"
+			"${cmd[@]}"	
+		  fi 
+		fi ###	diffCnt eq 0
+	  fi ### ccompare orig and red diffCnt
+
+	fi ### appname
 }
 
 if [[ -z $appname ]]; then 
