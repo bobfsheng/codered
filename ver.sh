@@ -19,8 +19,8 @@ if [[ -z $dir ]] ;  then
   echo "   -v could be at any position"
   echo "   appname: nodepkg | jsconfig | jssource | android | gradles"
   exit 1 
-# else
-#   echo "verbose=$verbose ; dir=$dir ; appname=$appname"
+else
+  echo "verbose=$verbose ; dir=$dir ; appname=$appname"
 fi
 
 function jsconfig_diff {
@@ -154,12 +154,13 @@ function android_diff {
   local verbose=$2
   local diffcnt=0;
   if [[ $verbose != true ]]; then
-    diffFileCnt=$(diff -r chgfile/${source}_android_src ${dir}/android/app/src | sort | wc -l)
-    echo ${diffcnt}
+    diffFileCnt=$(diff -rq chgfile/${source}_android_src ${dir}/android/app/src | sort | wc -l)
+    echo ${diffFileCnt}
   else
-    if ! diff -rq chgfile/${source}_android_src ${dir}/android/app/src > /dev/null 2>&1; then
+    diffFileCnt=$(diff -rq chgfile/${source}_android_src ${dir}/android/app/src | sort | wc -l)
+    if [[ $diffFileCnt -gt 0 ]]; then
       echo "--- diff detail......"
-      diff -r chgfile/${source}_android_src ${dir}/android/app/src | sort | head -15
+      diff -rq chgfile/${source}_android_src ${dir}/android/app/src | sort  | head -15
     else
       echo "--- all files matched."
     fi
@@ -172,6 +173,7 @@ function app_ver {
 	local found=false
   
 	case $appname in 
+	  
 	  nodepkg )
 	    found=false
 	    for source in orig red ; do
@@ -188,7 +190,6 @@ function app_ver {
 		done
 	    fi  
 	    ;;
-
 	  jsconfig | gradles | jssource | android )	
 	    cmd=("${appname}_diff" "orig" "false")
 	    local origDiffCnt=$("${cmd[@]}")   
@@ -199,12 +200,13 @@ function app_ver {
 		  echo "$dir $appname ---> orig"
 		else
 		  echo "$dir $appname ~~~> orig"
+		fi
 		  if [[ $verbose == true ]]; then
 			cmd[1]="orig"
 			cmd[2]="true"
+			echo "${cmd[@]}"	
 			"${cmd[@]}"	
 		  fi 
-		fi
 	    else  					## red 
 		if [[ $redDiffCnt -eq 0 ]]; then
 		  echo "$dir $appname ---> red"
@@ -218,7 +220,8 @@ function app_ver {
 		fi ###	diffCnt eq 0
 	    fi ### ccompare orig and red diffCnt
 	    ;;
-	  *) echo "$appname is invalid. Valid apps: nodepkg, jsconfig, gradles, jssource, android" 
+	  *) 
+	    echo "$appname is invalid. Valid apps: nodepkg, jsconfig, gradles, jssource, android" 
 	    ;; 
 	esac
 }
