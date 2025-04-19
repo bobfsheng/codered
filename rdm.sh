@@ -19,6 +19,13 @@ function findAvaBkupId {
   echo $nextAvaId
 }
 
+function bkupCurr {
+  if [[ -d andr2 ]]; then  
+  	echo moving current andr2 to andr2-$avaBkupId
+  	mv andr2 andr2-$avaBkupId
+  fi
+}
+
 reqBkupId=$1
 avaBkupId=$(findAvaBkupId)
 
@@ -29,11 +36,11 @@ fi
 
 if [[ ! -d andr2-$reqBkupId ]]; then 
   echo "Backup #$reqBkupId not found!"
-else
-  if [[ -d andr2 ]]; then  
-  	echo moving current andr2 to andr2-$avaBkupId
-  	mv andr2 andr2-$avaBkupId
-  fi
-  echo moving backup andr2-$reqBkupId as andr2
-  mv andr2-$reqBkupId andr2
+  bkupCurr
+  exit 0
 fi
+
+## bkup # $reqBkupId exists
+bkupCurr
+echo moving backup andr2-$reqBkupId as andr2
+mv andr2-$reqBkupId andr2
