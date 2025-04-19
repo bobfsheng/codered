@@ -2,7 +2,7 @@
 
 if [[ $# -eq 0 ]]; then
   echo "React-native app directory manager usage:	rdm.sh bkup-id"
-  echo "if bkup-id does not exist, save current as bkup with an avalable bkup id"
+  echo "if bkup-id does not exist, e.g., not in [1~9], or non-number,  save current as bkup with an avalable bkup id"
   exit 1
 fi
 
