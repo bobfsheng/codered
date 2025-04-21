@@ -23,13 +23,17 @@ function compare_for {
 	
 	elif [[ $appname == "android" ]]; then 
 	  echo "***** android (orig -> red) *****"
-	  diff -rq chgfile/${source}_android_src ${dir}/android/app/src
+	  diff -rq chgfile/orig_android_src chgfile/red_android_src  | grep -v DS_Store
 	
 	elif [[ $appname == "gradles" ]]; then 
 	  echo "***** gradles (orig -> red) *****"
+	  echo "--- build.gradle"
 	  diff chgfile/orig_build.gradle chgfile/red_build.gradle 
+	  echo "--- gradle.properties"
 	  diff chgfile/orig_gradle.properties chgfile/red_gradle.properties 
+	  echo "--- settings.gradle"
 	  diff chgfile/orig_settings.gradle chgfile/red_settings.gradle 
+	  echo "--- adroid/app/build.gradle"
 	  diff chgfile/orig_app_build.gradle chgfile/red_app_build.gradle 
 	
 	else

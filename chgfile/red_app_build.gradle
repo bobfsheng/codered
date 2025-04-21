@@ -9,10 +9,8 @@ tasks.named("generateAutolinkingPackageList") {
 android {
     compileSdkVersion 35
     namespace "com.andr2"
-    // namespace "com.redko.redvest"
     defaultConfig {
         applicationId "com.andr2"
-        // applicationId "com.redko.redvest"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'store', 'play'
