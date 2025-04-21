@@ -1,6 +1,10 @@
-red/
-andr2/
-andr2-?/
+red/*
+andr2/*
+andr2-1/*
+andr2-2/*
+andr2-3/*
+andr2-4/*
+andr2-5/*
 *.log
 .DS_Store
 *swp*
