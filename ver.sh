@@ -179,34 +179,29 @@ function android_diff {
   fi
 }
 
+function nodepkg_diff {
+  local source=$1
+  local verbose=$2
+  local diffcnt=0
+  if [[ $verbose != true ]]; then
+    diffcnt=$(diff chgfile/${source}_package.json ${dir}/package.json | wc -l)
+    echo $diffcnt
+  else
+    diffcnt=$(diff chgfile/${source}_package.json ${dir}/package.json | wc -l)
+    if [[ $diffcnt -gt 0 ]]; then
+      echo "--- diff detail......"
+      diff chgfile/${source}_package.json ${dir}/package.json 
+    fi
+  fi
+}
+
 function app_ver {
 	local dir=$1
 	local appname=$2
 	local found=false
   
 	case $appname in 
-	  
-	  nodepkg )
-	    found=false
-	    for source in orig red ; do
-		if diff chgfile/${source}_package.json ${dir}/package.json > /dev/null 2>&1 ; then 
-			echo "***** $dir $appname ---> $source"
-			found=true
-			break;
-		fi
-	    done 
-	    if [[ $found == false ]]; then
-	      if [[ $verbose == true ]]; then
-		for source in orig red ; do
-		  echo "***** $dir $appname ---> diff from $source: "
-		  diff chgfile/${source}_package.json ${dir}/package.json | head -20 
-		done
-	      else
-		  echo "***** $dir $appname ---> NONE"
-	      fi
-	    fi  
-	    ;;
-	  jsconfig | gradles | jssource | android )	
+	  nodepkg | jsconfig | gradles | jssource | android )	
 	    cmd=("${appname}_diff" "orig" "false")
 	    local origDiffCnt=$("${cmd[@]}")   
 	    cmd[1]="red"

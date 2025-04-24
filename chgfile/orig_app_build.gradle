@@ -82,6 +82,7 @@ android {
         applicationId "com.andr2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        missingDimensionStrategy 'store', 'play'
         versionCode 1
         versionName "1.0"
     }
@@ -110,6 +111,7 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'androidx.browser:browser:1.8.0' // or lower
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -117,3 +119,11 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.browser:browser:1.8.0'
+    }
+}
+

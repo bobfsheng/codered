@@ -1,0 +1,53 @@
+1. create init
+2. chg red nodepkg
+
+Execution failed for task ':app:checkDebugAarMetadata'.
+> A failure occurred while executing com.android.build.gradle.internal.tasks.CheckAarMetadataWorkAction > 2 issues were found when checking AAR metadata: 1. Dependency 'androidx.browser:browser:1.9.0-alpha02' requires libraries and applications that depend on it to compile against version 36 or later of the Android APIs. :app is currently compiled against android-35. Also, the maximum recommended compile SDK version for Android Gradle plugin 8.8.0 is 35. Recommended action: Update this project's version of the Android Gradle plugin to one that supports 36, then update this project to use compileSdk of at least 36. Note that updating a library or application's compileSdk (which allows newer APIs to be used) can be done separately from updating targetSdk (which opts the app in to new runtime behavior) and minSdk (which determines which devices the app can be installed on). 2. Dependency 'androidx.browser:browser:1.9.0-alpha02' requires Android Gradle plugin 8.9.1 or higher. This build currently uses Android Gradle plugin 8.
+
+
+3. change app build.gradle
+
+--- app/build.gradle.......
+84a85
+>         missingDimensionStrategy 'store', 'play'
+112a114
+>     implementation 'androidx.browser:browser:1.8.0' // or lower
+
+119a122,129
+>
+>
+> configurations.all {
+>     resolutionStrategy {
+>         force 'androidx.browser:browser:1.8.0'
+      }
+}
+
+New error: A failure occurred while executing com.android.build.gradle.internal.tasks.CheckDuplicatesRunnable > 
+
+Duplicate class android.support.v4.app.INotificationSideChannel found in modules core-1.13.1.aar -> core-1.13.1-runtime (androidx.core:core:1.13.1) and support-compat-26.1.0.aar -> support-compat-26.1.0-runtime (com.android.support:support-compat:26.1.0) 
+
+root cause: react-native-splash-screen uses com.android.support, and many classes exists in both0
+
+4. solution: migrate to react-native-bootsplash
+
+4.1. npm uninstall react-native-splash-screen
+4.2. npm install react-native-bootsplash ;  npx pod-install
+4.3. npx react-native generate-bootsplash
+4.4. MainActivity.java:
+import com.zoontek.rnbootsplash.RNBootSplash; // add this import
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  RNBootSplash.init(this); // initialize bootsplash
+}
+
+4.5. App.tsx
+import RNBootSplash from "react-native-bootsplash";
+
+useEffect(() => {
+  RNBootSplash.hide({ fade: true }); // hide after app loads
+}, []);
+
+
+
