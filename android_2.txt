@@ -136,3 +136,32 @@ com.andr2.app-mergeDebugResources-60:/values/values.xml:5337:
 error: style attribute 'attr/postSplashScreenTheme (aka com.andr2:attr/postSplashScreenTheme)' not found. 
 error: failed linking references. 
 
+
+bobsheng@Bobs-MacBook-Pro andr2 % cp ../chgfile/red_np_src/assets/Redvest_White_Logo.png src/assets
+bobsheng@Bobs-MacBook-Pro andr2 % npx react-native-bootsplash generate src/assets/Redvest_White_Logo.png --platforms=android --logo-width=100 --assets-output=assets/bootsplash
+
+🤖  Android
+    android/app/src/main/res/drawable-mdpi/bootsplash_logo.png (288x288)
+    android/app/src/main/res/drawable-hdpi/bootsplash_logo.png (432x432)
+    android/app/src/main/res/drawable-xhdpi/bootsplash_logo.png (576x576)
+    android/app/src/main/res/drawable-xxhdpi/bootsplash_logo.png (864x864)
+    android/app/src/main/res/drawable-xxxhdpi/bootsplash_logo.png (1152x1152)
+    android/app/src/main/AndroidManifest.xml
+    android/app/src/main/res/values/colors.xml
+    android/app/src/main/res/values/styles.xml
+
+📄  Assets
+    assets/bootsplash/manifest.json
+    assets/bootsplash/logo.png (100x100)
+    assets/bootsplash/logo@1,5x.png (150x150)
+    assets/bootsplash/logo@2x.png (200x200)
+    assets/bootsplash/logo@3x.png (300x300)
+    assets/bootsplash/logo@4x.png (400x400)
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  🔑  Get a license key for brand image / dark mode support  ┃
+┃      https://zoontek.gumroad.com/l/bootsplash-generator     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+💖  Thanks for using react-native-bootsplash
+
