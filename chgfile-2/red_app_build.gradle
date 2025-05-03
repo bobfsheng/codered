@@ -1,0 +1,32 @@
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
+
+tasks.named("generateAutolinkingPackageList") {
+    enabled = false
+}
+
+android {
+    compileSdkVersion 35
+    namespace "com.andr2"
+    defaultConfig {
+        applicationId "com.andr2"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        missingDimensionStrategy 'store', 'play'
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    // Core React Native dependency
+    implementation 'com.facebook.react:react-android:0.78.1'
+    // Soloader for native libs
+    implementation 'com.facebook.soloader:soloader:0.11'
+    // Add these if using New Architecture
+//    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.facebook.fbjni:fbjni:0.6.0'
+}

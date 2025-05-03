@@ -9,6 +9,9 @@ if [[ -z $dir ]] || [[ -z $appname ]] || [[ -z $source ]];  then
   exit 1 
 fi
 
+### TBI: get seq from dir, which is after andr2-, and use the correspondent chgfile- directory
+###      E.g., andr2 -> chgfile,  andr2-2 -> chgfile-2
+
 echo "changing $dir $appname to $source ......"
 
 if [[ $appname == "nodepkg" ]]; then
