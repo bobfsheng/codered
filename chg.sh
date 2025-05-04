@@ -24,19 +24,23 @@ if [[ $appname == "nodepkg" ]]; then
 elif [[ $appname == "jsconfig" ]]; then
   cp chgfile/${source}_app.json ${dir}/app.json 
   cp chgfile/${source}_tsconfig.json ${dir}/tsconfig.json 
-  if [[ $source == "red" ]]; then
-    cp chgfile/red_jsconfig.json ${dir}/jsconfig.json 
-    cp chgfile/red_metro.config.js ${dir}/metro.config.js 
+  if [[ -e chgfile/${source}_jsconfig.json ]]; then
+    cp chgfile/${source}_jsconfig.json ${dir}/jsconfig.json 
   else
     rm ${dir}/jsconfig.json 
+  fi
+  if [[ -e chgfile/${source}_metro.config.js ]]; then
+    cp chgfile/${source}_metro.config.js ${dir}/metro.config.js 
+  else
     rm ${dir}/metro.config.js 
   fi
  
 elif [[ $appname == "jssource" ]]; then
   cp chgfile/${source}_App.tsx ${dir}/App.tsx 
-  if [[ $source == "red" ]]; then
+  if [[ -d chgfile/${source}_np_src ]]; then
+	cp -fr chgfile/${source}_np_src ${dir}/src 
+  else
   	rm -fr ${dir}/src
-	cp -fr chgfile/red_np_src ${dir}/src 
   fi
   cp chgfile/${source}_index.js ${dir}/index.js 
 

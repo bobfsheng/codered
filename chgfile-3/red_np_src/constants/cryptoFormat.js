@@ -1,0 +1,23 @@
+const cryptoFormat = [
+  { formatted: 'BTC/USD', ticker: 'BTCUSD' },
+  { formatted: 'USDT/USD', ticker: 'USDTUSD' },
+  { formatted: 'PAXG/USD', ticker: 'PAXGUSD' },
+  { formatted: 'DOGE/USD', ticker: 'DOGEUSD' },
+  { formatted: 'ETH/USD', ticker: 'ETHUSD' },
+  { formatted: 'MATIC/USD', ticker: 'MATICUSD' },
+  { formatted: 'SHIB/USD', ticker: 'SHIBUSD' },
+  { formatted: 'LTC/USD', ticker: 'LTCUSD' },
+  { formatted: 'SUSHI/USD', ticker: 'SUSHIUSD' },
+  { formatted: 'SOLUSD', ticker: 'SOLUSD' },
+  { formatted: 'TRX/USD', ticker: 'TRXUSD' },
+  { formatted: 'UNI/USD', ticker: 'UNIUSD' },
+  { formatted: 'WBTC/USD', ticker: 'WBTCUSD' },
+  { formatted: 'YFI/USD', ticker: 'YFIUSD' },
+  { formatted: 'DAI/USD', ticker: 'DAIUSD' },
+  { formatted: 'LINK/USD', ticker: 'LINKUSD' },
+  { formatted: 'AAVE/USD', ticker: 'AAVEUSD' },
+  { formatted: 'AVAX/USD', ticker: 'AVAXUSD' },
+  { formatted: 'BAT/USD', ticker: 'BATUSD' },
+  { formatted: 'GRT/USD', ticker: 'GRTUSD' },
+]
+export { cryptoFormat }

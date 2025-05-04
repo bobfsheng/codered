@@ -10,8 +10,18 @@ function compare_for {
 	  diff chgfile/orig_app.json chgfile/red_app.json 
 	  echo "--- tsconfig.json"
 	  diff chgfile/orig_tsconfig.json chgfile/red_tsconfig.json
-	  echo "--- only red has jsconfig.json" 
-	  echo "--- only red has metro.config.js" 
+	  if [[ -e chgfile/orig_jsconfig.json ]]; then 
+	    echo "--- jsconfig.json"
+	    diff chgfile/orig_jsconfig.json chgfile/red_jsconfig.json 
+ 	  else
+	    echo "--- only red has jsconfig.json" 
+	  fi
+	  if [[ -e chgfile/orig_metro.config.js ]]; then
+	    echo "--- metro.config.js"
+	    diff chgfile/orig_metro.config.js chgfile/red_metro.config.js 
+	  else
+	    echo "--- only red has metro.config.js" 
+	  fi
 	 
 	elif [[ $appname == "jssource" ]]; then
 	  echo "***** jssource (orig -> red) *****"

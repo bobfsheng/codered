@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "ES2017",
+    "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
+    "paths": {
+      /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+      "@assets/*": ["assets/*"],
+      "@components": ["components"],
+      "@models": ["models"],
+      "@navigation": ["navigation"],
+      "@screens": ["screens"],
+      "@services": ["services"],
+      "@store": ["store"],
+      "@utils": ["utils"],
+      "@hooks": ["hooks"],
+      "@constants/*": ["constants/*"],
+      "@functions": ["functions"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

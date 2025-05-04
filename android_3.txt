@@ -1,0 +1,166 @@
+1. create init: npx @react-native-community/cli@latest init andr2
+2. chg.sh andr2 nodepkg orig
+   chg.sh andr2 gradles orig
+   chg.sh andr2 jsconfig orig
+   chg.sh andr2 jssource orig
+   chg.sh andr2 android orig
+
+
+--- app/build.gradle.......
+84a85
+>         missingDimensionStrategy 'store', 'play'
+112a114
+>     implementation 'androidx.browser:browser:1.8.0' // or lower
+
+119a122,129
+>
+>
+> configurations.all {
+>     resolutionStrategy {
+>         force 'androidx.browser:browser:1.8.0'
+      }
+}
+
+New error: A failure occurred while executing com.android.build.gradle.internal.tasks.CheckDuplicatesRunnable > 
+
+Duplicate class android.support.v4.app.INotificationSideChannel found in modules core-1.13.1.aar -> core-1.13.1-runtime (androidx.core:core:1.13.1) and support-compat-26.1.0.aar -> support-compat-26.1.0-runtime (com.android.support:support-compat:26.1.0) 
+
+root cause: react-native-splash-screen uses com.android.support, and many classes exists in both0
+
+4. solution: migrate to react-native-bootsplash,  4.3 ~ 4.5 wait until np-src in red
+
+4.1. npm uninstall react-native-splash-screen
+4.2. npm install react-native-bootsplash ;  npx pod-install
+4.3. npx react-native generate-bootsplash
+4.3.1. create or edit android/app/src/main/res/values/styles.xml
+
+<resources>
+    <style name="BootSplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#ffffff</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+</resources>
+
+4.3.2. update AndroidMainfest.xml
+
+<activity
+  android:name=".MainActivity"
+  android:theme="@style/BootSplashTheme"
+  ... />
+
+
+
+4.4. MainActivity.java:
+import com.zoontek.rnbootsplash.RNBootSplash; // add this import
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  RNBootSplash.init(this, R.style.BootSplashTheme)
+  super.onCreate(savedInstanceState);
+}
+
+or MainActivity.kt
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    RNBootSplash.init(this, R.style.BootSplashTheme) // 👈 initialize bootsplash *before* super.onCreate
+    super.onCreate(savedInstanceState)
+  }
+
+4.5. App.tsx
+import RNBootSplash from "react-native-bootsplash";
+
+useEffect(() => {
+  RNBootSplash.hide({ fade: true }); // hide after app loads
+}, []);
+
+after 4.1 ~ 4.2 duplicated class error gone! But after lauched in emulator, don't see the app runing - maybe related to the package of splash screen. 
+
+
+after 4.3 ~ 4.4, re-install npm package, "gradle clean" --> New error: kotling compiling error related to splash screen
+
+5. so far:
+
+bobsheng@Bobs-MacBook-Pro codered % ver.sh andr2                                                                                             
+***** andr2 nodepkg ---> red
+***** andr2 jsconfig ---> orig
+***** andr2 gradles ---> orig
+***** andr2 jssource ---> orig
+***** andr2 android ~~~> orig
+
+bobsheng@Bobs-MacBook-Pro codered % ver.sh andr2 android -v                                                                              
+***** andr2 android ~~~> orig
+--- diff detail......
+Files chgfile/orig_android_src/main/AndroidManifest.xml and andr2/android/app/src/main/AndroidManifest.xml differ
+Files chgfile/orig_android_src/main/java/com/andr2/MainActivity.kt and andr2/android/app/src/main/java/com/andr2/MainActivity.kt differ
+Files chgfile/orig_android_src/main/res/values/styles.xml and andr2/android/app/src/main/res/values/styles.xml differ
+Only in andr2/android/app/src/main/res/values: styles.orig.xml
+
+
+bobsheng@Bobs-MacBook-Pro codered % diff chgfile/orig_android_src/main/AndroidManifest.xml andr2/android/app/src/main/AndroidManifest.xml
+14a15
+>         android:theme="@style/BootSplashTheme"
+
+bobsheng@Bobs-MacBook-Pro codered % diff chgfile/orig_android_src/main/java/com/andr2/MainActivity.kt andr2/android/app/src/main/java/com/andr2/MainActivity.kt
+2a3,4
+> import android.os.Bundle
+> import com.zoontek.rnbootsplash.RNBootSplash
+9a12,16
+>   override fun onCreate(savedInstanceState: Bundle?) {
+>     RNBootSplash.init(this, R.style.BootSplashTheme) // 👈 initialize bootsplash *before* super.onCreate
+>     super.onCreate(savedInstanceState)
+>   }
+> 
+
+bobsheng@Bobs-MacBook-Pro codered % diff chgfile/orig_android_src/main/res/values/styles.xml andr2/android/app/src/main/res/values/styles.xml
+2,6c2,4
+< 
+<     <!-- Base application theme. -->
+<     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+<         <!-- Customize your theme here. -->
+<         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+---
+>     <style name="BootSplashTheme" parent="Theme.SplashScreen">
+>         <item name="windowSplashScreenBackground">#ffffff</item>
+>         <item name="postSplashScreenTheme">@style/AppTheme</item>
+8d5
+< 
+
+error Failed to install the app. Command failed with exit code 1: ./gradlew app:installDebug -PreactNativeDevServerPort=8081 FAILURE: Build failed with an exception. * What went wrong:
+Execution failed for task ':app:processDebugResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction 
+> Android resource linking failed error: resource style/Theme.SplashScreen (aka com.andr2:style/Theme.SplashScreen) not found. 
+com.andr2.app-mergeDebugResources-60:/values/values.xml:5336: error: style attribute 'attr/windowSplashScreenBackground 
+  (aka com.andr2:attr/windowSplashScreenBackground)' not found. 
+com.andr2.app-mergeDebugResources-60:/values/values.xml:5337: 
+error: style attribute 'attr/postSplashScreenTheme (aka com.andr2:attr/postSplashScreenTheme)' not found. 
+error: failed linking references. 
+
+
+bobsheng@Bobs-MacBook-Pro andr2 % cp ../chgfile/red_np_src/assets/Redvest_White_Logo.png src/assets
+bobsheng@Bobs-MacBook-Pro andr2 % npx react-native-bootsplash generate src/assets/Redvest_White_Logo.png --platforms=android --logo-width=100 --assets-output=assets/bootsplash
+
+🤖  Android
+    android/app/src/main/res/drawable-mdpi/bootsplash_logo.png (288x288)
+    android/app/src/main/res/drawable-hdpi/bootsplash_logo.png (432x432)
+    android/app/src/main/res/drawable-xhdpi/bootsplash_logo.png (576x576)
+    android/app/src/main/res/drawable-xxhdpi/bootsplash_logo.png (864x864)
+    android/app/src/main/res/drawable-xxxhdpi/bootsplash_logo.png (1152x1152)
+    android/app/src/main/AndroidManifest.xml
+    android/app/src/main/res/values/colors.xml
+    android/app/src/main/res/values/styles.xml
+
+📄  Assets
+    assets/bootsplash/manifest.json
+    assets/bootsplash/logo.png (100x100)
+    assets/bootsplash/logo@1,5x.png (150x150)
+    assets/bootsplash/logo@2x.png (200x200)
+    assets/bootsplash/logo@3x.png (300x300)
+    assets/bootsplash/logo@4x.png (400x400)
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  🔑  Get a license key for brand image / dark mode support  ┃
+┃      https://zoontek.gumroad.com/l/bootsplash-generator     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+💖  Thanks for using react-native-bootsplash
+

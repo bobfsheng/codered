@@ -1,0 +1,198 @@
+const infoText = [
+  {
+    id: 1,
+    title: 'Traders',
+    info: 'Redvest offers challenges that test trading skills. Use Redvest coins to engage with friends. Each user starts with $10,000 Redvest coins. These coins hold no monetary value and cannot be bought. Use responsibly. Visit www.redvest.app/terms before you start.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 2,
+    title: 'Redvest Coins',
+    info: 'Challenges on Redvest rely on trading skills. Challenge your friends using Redvest coins, with a starting balance of $10,000. These coins are symbolic, having no real life monetary value. Please note that no amount, currency, asset, coin, or any similar in-app item can be exchanged or cashed out for real money. They are designed solely for enjoyment and cannot be converted into real-world currency. Use responsibly and consult www.redvest.app/terms before use.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 3,
+    title: 'Coins Available',
+    info: "The available coins indicate the amount you can use to challenge friends. This doesn't include coins tied up in other active challenges. Redvest coins are distributed to every user, starting with $10,000, and are only for challenging friends. These coins have no real-world value and are non-purchasable. Use responsibly. Visit www.redvest.app/terms before use.",
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 4,
+    title: 'Challenges',
+    info: 'Compete against other users to gain the highest profit within a set timeframe. Choose your timeline (1 hour, 24 hours, or 1 week defaulting to 1 hour) and your challenge basis (profit percentage or absolute profit, defaulting to profit percentage). When you challenge a user, they receive a notification and the challenge begins upon their acceptance. Redvest coins are used to initiate these challenges.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 5,
+    title: 'Timeline',
+    info: 'Select a timeline for your challenge: 1 hour, 24 hours, or 1 week (defaults to 1 hour). Upon initiating a challenge, the user will receive a notification and the challenge begins once they accept. You will also be notified.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 6,
+    title: 'Challenge Type',
+    info: "Choose a challenge type. Options include using the profit percentage or the dollar amount profit as the challenge's deciding factor. Using percentage is recommended when participants have varying account balances.",
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 7,
+    title: 'Challenge Amount',
+    info: "The challenge amount represents the total coins used to challenge other users' trading skills. The winner of the challenge receives their initial coins plus an additional 90% - a total return of 190%. The margin fee in Redvest coins simulates the gaming experience. Please note these amounts have no real-world monetary value and cannot be bought or redeemed.",
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 8,
+    title: 'Buying Power',
+    info: "Buying power denotes the total dollar value of shares and securities that you are currently able to purchase. It includes the leverage and isn't merely a reflection of the cash you possess.",
+    pic: require('@assets/images/Info/tickerp.png'),
+  },
+  {
+    id: 9,
+    title: 'Cash Balance',
+    info: 'Cash balance signifies the total amount of cash you have at your disposal for transactions or withdrawals, exclusive of any stocks, equity, or crypto assets you may own.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 10,
+    title: 'Limit Price',
+    info: 'The calculated value of an opening buy order is derived by multiplying the order’s limit price by its quantity. For market buy orders, the limit price is set at 2.5% to 4% above the current market price.',
+    pic: '',
+  },
+  {
+    id: 11,
+    title: 'Long Market Value',
+    info: 'Long positions involve buying shares of a stock with the anticipation of a price increase. Shorting, on the other hand, involves borrowing and selling shares, betting on a price decrease. The long market value refers to the total value of all long security positions held, typically based on the day-to-day price differences.',
+    pic: '',
+  },
+  {
+    id: 12,
+    title: 'Order Type',
+    info: 'A market order is a request to buy or sell a security at the current market price. It is filled almost instantly.\n\nA limit order is an order to buy or sell at a specified price or better. A buy limit order is executed at the specified limit price or lower, and a sell limit order at the limit price or higher. \n\nA stop (market) order is an order to buy or sell a security when its price moves past a specific point, ensuring a higher probability of achieving a predetermined entry or exit price.',
+    pic: require('@assets/images/Info/stopp.png'),
+  },
+  {
+    id: 13,
+    title: 'Market',
+    info: 'A market order is a request to buy or sell a security at the current market price. It is the most likely method of filling an order, and it fills almost instantly.',
+    pic: '',
+  },
+  {
+    id: 14,
+    title: 'Limit',
+    info: 'A limit order is an order to buy or sell at a specified price or better. A buy limit order is executed at the limit price or lower, and a sell limit order at the limit price or higher. Unlike a market order, a limit price must be specified when submitting your order.',
+    pic: '',
+  },
+  {
+    id: 15,
+    title: 'Stop',
+    info: 'A stop (market) order is an order to buy or sell a security when its price surpasses a certain point, ensuring a higher probability of reaching a predetermined entry or exit price. When the market price crosses the stop price, the stop order becomes a market order. For buy stop orders, Alpaca converts them into stop limit orders with a limit price 4% higher than a stop price for amounts under $50 (or 2.5% higher for amounts equal or above $50). Sell stop orders are not converted into stop limit orders.',
+    pic: '',
+  },
+  {
+    id: 16,
+    title: 'Stop Limit',
+    info: 'A stop-limit order is a conditional trade over a set timeframe that combines the features of a stop order with those of a limit order and is used to mitigate risk. It will be executed at a specified limit price, or better, after a given stop price has been reached. Once the stop price is reached, the stop-limit order becomes a limit order to buy or sell at the limit price or better.',
+    pic: '',
+  },
+  {
+    id: 17,
+    title: 'Portfolio Value',
+    info: 'Portfolio value is the total value of the securities or stocks you currently hold.',
+    pic: require('@assets/images/Info/tickerp.png'),
+  },
+
+  {
+    id: 18,
+    title: 'Price Info',
+    info: 'Stock tickers represent individual companies and the ticker price is the price per one share of that stock at a specific moment in the market. To place orders that would open new positions or add to existing ones, your account must have sufficient buying power. Alpaca checks for "buying power" for both long and short positions. The calculated value of an opening buy order is the order’s limit price multiplied by the order’s quantity. For market buy orders, the limit price is typically 2.5% to 4% above the current market price.',
+    pic: require('@assets/images/Info/pricep.png'),
+  },
+  {
+    id: 19,
+    title: 'Quantity',
+    info: 'Select the number of shares you would like to buy or sell. Slide the bar to select the amount or tap to input the quantity manually.',
+    pic: require('@assets/images/Info/qtyp.png'),
+  },
+  {
+    id: 20,
+    title: 'Stock Ticker',
+    info: 'Stock tickers are unique abbreviations assigned to each publicly traded company. Both the company name and ticker are displayed for your convenience when choosing shares to trade.',
+    pic: require('@assets/images/Info/tickerp.png'),
+  },
+  {
+    id: 21,
+    title: 'Stop Loss',
+    info: 'A stop (market) order is an order to buy or sell a security when its price surpasses a particular point, increasing the probability of achieving a predetermined entry or exit price.',
+    pic: require('@assets/images/Info/stopp.png'),
+  },
+  {
+    id: 22,
+    title: 'Regular Trading',
+    info: 'A day order is only eligible for execution on the day it is live. By default, the order is only valid during Regular Trading Hours (9:30am - 4:00pm ET). If unfilled after the closing auction, it is automatically canceled. If submitted after the close, it is queued and submitted the following trading day. However, if marked as eligible for extended hours, the order can also execute during supported extended hours.',
+    pic: '',
+  },
+  {
+    id: 23,
+    title: 'Good Until Cancelled',
+    info: 'A Good Until Cancelled (GTC) order remains active until you decide to cancel it. Non-marketable GTC limit orders may be adjusted in price to account for corporate actions affecting the stock. We do not currently support Do Not Reduce (DNR) orders to opt out of such price adjustments.',
+    pic: '',
+  },
+  {
+    id: 24,
+    title: 'Immediate or Canceled',
+    info: 'An Immediate Or Cancel (IOC) order mandates that all or part of the order be executed immediately, with any unfilled portion of the order being canceled.',
+    pic: '',
+  },
+  {
+    id: 25,
+    title: 'Fill or Kill',
+    info: 'A Fill or Kill (FOK) order is an order that must be executed in its entirety, or not at all. If the order cannot be fully filled, it is entirely canceled.',
+    pic: '',
+  },
+  {
+    id: 26,
+    title: 'Ticker Price',
+    info: 'Stock tickers represent individual companies, and the ticker price is the price per share at a particular moment in the market. For your orders to be accepted, your account must have sufficient buying power. Alpaca checks "buying" power for both long and short positions. The calculated value of an opening buy order is the order’s limit price multiplied by the order’s quantity. For market buy orders, the limit price is typically 2.5% to 4% above the current market price.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 27,
+    title: 'Currency Price',
+    info: 'This is the price of the selected cryptocurrency in US dollars. Unlike stocks, cryptocurrencies are available for trading 24/7.',
+    pic: require('@assets/images/Info/crypto.png'),
+  },
+  {
+    id: 28,
+    title: 'Currency',
+    info: 'A cryptocurrency is a digital currency created with encrypted algorithms. They are deemed safer due to the use of hash functions which secure the connection between sender and receiver.',
+    pic: require('@assets/images/Info/crypto.png'),
+  },
+  {
+    id: 29,
+    title: 'Exchange',
+    info: 'To buy a cryptocurrency, you need to exchange it with another currency. In the case of stocks, Redvest only provides the option to purchase with US dollars. For cryptocurrencies, we provide three options for buying: US Dollar, USD Tether, and Bitcoin. The exchange rates change in real time, so sometimes it might be more advantageous to use other currencies. For a successful purchase, you need to have the exchange currency.',
+    pic: require('@assets/images/Info/crypto.png'),
+  },
+  {
+    id: 30,
+    title: 'Time In Force',
+    info: 'A day order is only valid for execution on the day it is live. By default, the order is only valid during Regular Trading Hours (9:30am - 4:00pm ET). If unfilled after the closing auction, it is automatically canceled. If submitted after the close, it is queued and submitted the following trading day. However, if marked as eligible for extended hours, the order can also execute during supported extended hours.',
+    pic: '',
+  },
+  {
+    id: 31,
+    title: 'Leaderboard',
+    info: 'Leaderboards are updated on Saturdays weekly! Engage in friendly competition with fellow investors on our dynamic leaderboard, updated weekly. Gain insights into standings and track progress over time. Any user with a Redvest account can participate. If you prefer not to participate, please contact support.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  {
+    id: 32,
+    title: 'Markets Status',
+    info: 'This shows if the close price of SPY which represents the S&P 500 price is higher than the previous close price.',
+    pic: require('@assets/images/Info/win.png'),
+  },
+  
+]
+
+export { infoText }

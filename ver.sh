@@ -37,11 +37,19 @@ function jsconfig_diff {
 	diffcnt=$((diffcnt + $?))
 	diff chgfile/${source}_tsconfig.json ${dir}/tsconfig.json > /dev/null 2>&1
 	diffcnt=$((diffcnt + $?))
-	if [[ $source == "red" ]]; then
-          diff chgfile/red_jsconfig.json ${dir}/jsconfig.json > /dev/null 2>&1
+	## jsconfig
+	if [[ -e chgfile/${source}_jsconfig.json ]] && [[ -e ${dir}/jsconfig.json ]]; then
+          diff chgfile/${source}_jsconfig.json ${dir}/jsconfig.json > /dev/null 2>&1
 	  diffcnt=$((diffcnt + $?))
-	  diff chgfile/red_metro.config.js ${dir}/metro.config.js > /dev/null 2>&1
+	else
+	  diffcnt=$((diffcnt + 1))
+	fi
+	## metro.config.js
+	if [[ -e chgfile/${source}_metro.config.js ]] && [[ -e ${dir}/metro.config.js ]]; then
+	  diff chgfile/${source}_metro.config.js ${dir}/metro.config.js > /dev/null 2>&1
 	  diffcnt=$((diffcnt + $?))
+	else
+	  diffcnt=$((diffcnt + 1))
 	fi
 	echo $diffcnt	
   else 
@@ -57,13 +65,19 @@ function jsconfig_diff {
 	else
 	  echo --- tsconfig.json.......matched
 	fi
-	if [[ $source == "red" ]]; then
-	  if diff chgfile/red_jsconfig.json ${dir}/jsconfig.json > /dev/null 2>&1; then
+	if [[ -e chgfile/${source}_jsconfig.json ]] && [[ -e ${dir}/jsconfig.json ]]; then
+	  if ! diff chgfile/${source}_jsconfig.json ${dir}/jsconfig.json > /dev/null 2>&1; then
 		echo --- jsconfig.json.......
-          	diff chgfile/red_jsconfig.json ${dir}/jsconfig.json | head -10
+          	diff chgfile/${source}_jsconfig.json ${dir}/jsconfig.json | head -10
 	  else
 	  	echo --- jsconfig.json.......matched
 	  fi
+	elif [[ -e chgfile/${source}_jsconfig.json ]]; then
+	  echo --- jsconfig.json......missing
+        else
+	  echo --- jsconfig.json......should not exist
+	fi
+	if [[ -e chgfile/${source}_metro.config.js ]] && [[ -e ${dir}/metro.config.js ]]; then
 	  if ! diff chgfile/${source}_metro.config.js ${dir}/metro.config.js > /dev/null 2>&1; then 
 	    echo --- metro_config.js.......
 	    diff chgfile/${source}_metro.config.js ${dir}/metro.config.js | head -10
@@ -127,14 +141,16 @@ function jssource_diff {
     fi
     diff chgfile/${source}_index.js ${dir}/index.js > /dev/null 2>&1
     diffcnt=$((diffcnt + $?))
-    if [[ ${source} == "red" ]]; then
-      if [[ -d ${dir}/src ]]; then 
-	fileCnt=$(diff -r chgfile/red_np_src ${dir}/src | grep -v DS_Store | sort | wc -l)
-      else 
-	fileCnt=$(find chgfile/red_np_src | grep -v DS_Store | wc -l) 
-      fi
-      diffcnt=$((diffcnt + fileCnt))
+    if [[ -d chgfile/${source}_np_src ]] && [[ -d ${dir}/src ]]; then
+	fileCnt=$(diff -r chgfile/${source}_np_src ${dir}/src | grep -v DS_Store | sort | wc -l)
+    elif [[ -d chgfile/${source}_np_src ]]; then
+	fileCnt=$(find chgfile/${source}_np_src | grep -v DS_Store | wc -l) 
+    elif [[ -d ${dir}/src ]]; then
+	fileCnt=$(find ${dir}/src | grep -v DS_Store | wc -l) 
+    else 
+	fileCnt=0
     fi
+    diffcnt=$((diffcnt + fileCnt))
     echo ${diffcnt}
   else
     outputLineCnt=$(diff chgfile/${source}_App.tsx ${dir}/App.tsx | wc -l)
@@ -150,13 +166,17 @@ function jssource_diff {
     else
       echo --- index.js......matched
     fi
-    if [[ -d chgfile/${source}_np_src ]]; then
+    if [[ -d chgfile/${source}_np_src ]] && [[ -d ${dir}/src ]]; then
 	if ! diff -rq chgfile/${source}_np_src ${dir}/src | grep -v DS_Store > /dev/null 2>&1; then
-	  echo -- np src directory .......
-	  diff -r chgfile/${source}_np_src ${dir}/src | grep -v DS_Store | sort | head -15
+	  echo --- np src directory ......matched
 	else
-	  echo -- np src directory ......matched
+    	  echo --- np src directory .......
+	  diff -r chgfile/${source}_np_src ${dir}/src | grep -v DS_Store | sort | head -15
 	fi
+    elif [[ -d chgfile/${source}_np_src ]]; then
+	echo --- missing np src directory 
+    else
+	echo np src directory should not be there
     fi
   fi ## verbose or no
 }
